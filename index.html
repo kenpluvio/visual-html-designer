@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
     <div id="app">
@@ -24,6 +26,10 @@
                 <button id="copy-btn" title="Copy HTML">
                     <i data-lucide="copy"></i>
                     <span>Copy</span>
+                </button>
+                <button id="pdf-btn" title="Export PDF">
+                    <i data-lucide="file-text"></i>
+                    <span>PDF</span>
                 </button>
                 <button id="reset-btn" title="Reset View">
                     <i data-lucide="refresh-cw"></i>

@@ -306,3 +306,39 @@ document.getElementById('file-input').addEventListener('change', (e) => {
         reader.readAsDataURL(file);
     }
 });
+
+// PDF Export Logic
+document.getElementById('pdf-btn').addEventListener('click', () => {
+    const doc = previewFrame.contentDocument;
+    const element = doc.body;
+    
+    // Create a clone to avoid showing editing handles in PDF
+    const clone = element.cloneNode(true);
+    clone.querySelectorAll('.v-selected, .v-hover').forEach(el => {
+        el.classList.remove('v-selected', 'v-hover');
+    });
+    
+    const opt = {
+        margin:       10,
+        filename:     'design-export.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, logging: false },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    // Show loading state
+    const btn = document.getElementById('pdf-btn');
+    const span = btn.querySelector('span');
+    const originalText = span.innerText;
+    span.innerText = 'Exporting...';
+    btn.disabled = true;
+
+    html2pdf().set(opt).from(clone).save().then(() => {
+        span.innerText = originalText;
+        btn.disabled = false;
+    }).catch(err => {
+        console.error('PDF Export Error:', err);
+        span.innerText = 'Error';
+        btn.disabled = false;
+    });
+});
