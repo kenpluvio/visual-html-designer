@@ -108,7 +108,9 @@ function injectEditingTools() {
     let startX, startY, startLeft, startTop, startWidth, startHeight;
 
     doc.addEventListener('mousedown', (e) => {
-        if (!e.altKey) return; // Use Alt+Click to start dragging
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        const isModifierDown = e.altKey || (isMac && e.metaKey);
+        if (!isModifierDown) return; 
         currentElement = e.target;
         isDragging = true;
         startX = e.clientX;
@@ -125,8 +127,19 @@ function injectEditingTools() {
     });
 
     doc.addEventListener('mousemove', (e) => {
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        const isModifierDown = e.altKey || (isMac && e.metaKey);
+        
+        // Update cursor based on modifier keys
+        if (isModifierDown && !isDragging) {
+            doc.body.style.cursor = e.shiftKey ? 'nwse-resize' : 'grab';
+        } else if (!isDragging) {
+            doc.body.style.cursor = 'default';
+        }
+
         if (!isDragging || !currentElement) return;
 
+        doc.body.style.cursor = e.shiftKey ? 'nwse-resize' : 'grabbing';
         const dx = e.clientX - startX;
         const dy = e.clientY - startY;
 
@@ -144,6 +157,7 @@ function injectEditingTools() {
     doc.addEventListener('mouseup', () => {
         isDragging = false;
         currentElement = null;
+        doc.body.style.cursor = 'default';
     });
 
     // Enable content editing
@@ -188,7 +202,10 @@ function selectElement(el) {
     const doc = previewFrame.contentDocument;
     doc.querySelectorAll('.v-selected').forEach(x => x.classList.remove('v-selected'));
     el.classList.add('v-selected');
-    targetInfo.innerText = `Selected: <${el.tagName.toLowerCase()}> | Use Alt+Drag to move, Alt+Shift+Drag to resize`;
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    const cmdKey = isMac ? 'Cmd' : 'Alt';
+    const optKey = 'Opt';
+    targetInfo.innerText = `Selected: <${el.tagName.toLowerCase()}> | Use ${cmdKey}/${optKey}+Drag to move, Shift+${cmdKey}/${optKey}+Drag to resize`;
 }
 
 function syncChangesToEditor() {
