@@ -111,18 +111,26 @@ function injectEditingTools() {
         const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
         const isModifierDown = e.altKey || (isMac && e.metaKey);
         if (!isModifierDown) return; 
+        
         currentElement = e.target;
         isDragging = true;
         startX = e.clientX;
         startY = e.clientY;
         
+        const style = doc.defaultView.getComputedStyle(currentElement);
         const rect = currentElement.getBoundingClientRect();
-        startLeft = currentElement.offsetLeft;
-        startTop = currentElement.offsetTop;
+        
+        // Ensure element is movable
+        if (style.position === 'static') {
+            currentElement.style.position = 'relative';
+        }
+
+        // Get initial coordinates from computed style to avoid jumps
+        startLeft = parseInt(style.left) || 0;
+        startTop = parseInt(style.top) || 0;
         startWidth = rect.width;
         startHeight = rect.height;
 
-        currentElement.style.position = 'relative';
         currentElement.style.zIndex = '1000';
     });
 
