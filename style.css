@@ -1,0 +1,219 @@
+:root {
+    --bg-color: #0d1117;
+    --pane-bg: #161b22;
+    --header-bg: rgba(22, 27, 34, 0.85);
+    --border-color: #30363d;
+    --accent-color: #58a6ff;
+    --accent-glow: rgba(88, 166, 255, 0.3);
+    --text-color: #c9d1d9;
+    --text-dim: #8b949e;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    height: 100vh;
+    overflow: hidden;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+header {
+    height: 60px;
+    background-color: var(--header-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo i {
+    color: var(--accent-color);
+}
+
+.logo h1 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+.toolbar {
+    display: flex;
+    gap: 8px;
+}
+
+button {
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+button:hover {
+    border-color: var(--accent-color);
+    background: rgba(88, 166, 255, 0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button i {
+    width: 16px;
+    height: 16px;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+#editor-pane {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    width: 40%;
+}
+
+#preview-pane {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    flex: 1;
+    background: #f8f9fa;
+}
+
+.pane-header {
+    height: 44px;
+    background: var(--pane-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.header-left i {
+    width: 14px;
+    height: 14px;
+}
+
+#code-editor {
+    flex: 1;
+    width: 100%;
+}
+
+#resizer {
+    width: 2px;
+    background: var(--border-color);
+    cursor: col-resize;
+    transition: background 0.3s, width 0.3s;
+    position: relative;
+    z-index: 10;
+}
+
+#resizer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -4px;
+    right: -4px;
+    bottom: 0;
+}
+
+#resizer:hover, #resizer.active {
+    background: var(--accent-color);
+    width: 4px;
+}
+
+.iframe-container {
+    flex: 1;
+    padding: 20px;
+    overflow: auto;
+    background-image: 
+        linear-gradient(45deg, #eef1f5 25%, transparent 25%), 
+        linear-gradient(-45deg, #eef1f5 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #eef1f5 75%), 
+        linear-gradient(-45deg, transparent 75%, #eef1f5 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+}
+
+#preview-frame {
+    border: none;
+    width: 100%;
+    height: 100%;
+    background: white;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+
+.preview-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#target-info {
+    font-size: 0.7rem;
+    color: var(--accent-color);
+    text-transform: none;
+    background: rgba(88, 166, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(88, 166, 255, 0.2);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+#app {
+    animation: fadeIn 0.5s ease-out;
+}
